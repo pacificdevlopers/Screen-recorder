@@ -1,144 +1,133 @@
-# Screen-recorder
-Free screen-recorder in HD quality
-# File covnvetor 😊
-This is a software which is made by python 100% it contains many features. The realses of the app versions is 1.0 t0 5.0
-**realses:** 4 times.
-### Features:-
-- 0 bugs
-- It can download video from youtube.
-- It can convert JPEG file to pd
-- IT can convert avi files to mp4 files.
-- It can convert audio files(mp3 or .wav) to txt file.
-- It can guide how toconvert exe file to PK files
-- It is secure
-### About app:-
-- 70 MB
-- **Language:** python
-- **Libraraies:** Tkinter , os , webbrowser , yt_dlp , pillow , path
-- **Structure type:** Dialog box 
+# Screen-recorder😀
+It is made by fully python languages.There are many libraries are used in this software
 
-## Code explanation:
-**Imports and Setup**
-``` bash
+## Requirements
+
+- Python 3
+- Numpy library 
+- Tkinter library 
+- Opencv library
+- pyautogui library
+
+```
+    pip install pyautogui
+```
+
+```
+    pip install Opencv-python
+```
+
+```
+    pip install numpy
+```
+
+```
     pip install tkinter
 ```
-``` bash
-    pip install pillow
-```
-```
-    pip install yt_dlp
-```
-These the libraries you need to make this software.
+## Uses of libraries:-
+- Tkinter: Used for creating the GUI.
+- Pyautogui: Used for capturing screenshots.
+- OpenCV library for video processing.
+- Numpy: Used for array manipulation.
+- Os: Used for file path operations.
+- Datetime: Used for timestamping the output file.
+- Threading: Used to run the screen recording in a separate thread.
+# Code explanation:
+## ScreenRecorder Class:
 ``` python
-import os
-import tkinter as tk
-from tkinter import filedialog, messagebox
-from tkinter import ttk
-from PIL import Image
-from pathlib import Path
-import webbrowser
-import yt_dlp  # yt-dlp library for video downloading
-```
-### Uses of these libraries:
-- **OS:** Provides a way of using operating system dependent functionality.
--  **Tkinter** Standard Python interface to the Tk GUI toolkit.
-- **Pillow:** Python Imaging Library for opening, manipulating, and saving many different image file formats.
-- **Webrowser:** provides a high-level interface to allow displaying Web-based documents to users.
-- **yt_dlp**: A command-line program to download videos from YouTube and other video sites.
+class ScreenRecorder:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Screen Recorder")
+        self.root.geometry("350x250")
+        self.root.configure(bg="#1e1e1e")
 
-**Function to Convert JPEG to PDF**
-``` python
-    def convert_jpeg_to_pdf():
-    file_path = filedialog.askopenfilename(filetypes=[("JPEG files", "*.jpg *.jpeg")])
-    if not file_path:
-        return
-    
-    try:
-        image = Image.open(file_path)
-        output_path = Path.home() / "Downloads" / (Path(file_path).stem + ".pdf")
-        image.save(output_path, "PDF", resolution=100.0)
-        messagebox.showinfo("Success", f"File converted and saved to {output_path}")
-    except Exception as e:
-        messagebox.showerror("Error", f"An error occurred: {e}")
-```
- - **filedialog.askopenfilename:** Opens a file dialog to select a JPEG file.
-- **Image.open:** Opens the selected image file.
-- **Path.home() / "Downloads" / (Path(file_path).stem + ".pdf"):** Constructs the output path in the Downloads folder.
-- **image.save:** Saves the image as a PDF.
-- **Messagebox.showinfo:** Displays a success message.
-- **Messagebox.showerror:** Displays an error message if an exception occurs.
+        self.is_recording = False
 
-**Mock Function for EXE to APK Conversion**
-``` python
-    def convert_exe_to_apk():
-    messagebox.showinfo(
-        "EXE to APK Conversion",
-        "Direct EXE to APK conversion is not feasible. "
-        "Please use tools like 'Wine' for running EXE on Android or port your application using development frameworks."
-    )
-    webbrowser.open("https://example.com/exe-to-apk-guide")
-```
-- **Messagebox.showinfo:** Displays an informational message about the infeasibility of direct EXE to APK conversion.
-- **Webbrowser.open:** Opens a web browser to a guide on EXE to APK conversion.
+        self.title_label = Label(root, text="Screen Recorder", font=("Helvetica", 18, "bold"), bg="#1e1e1e", fg="#ffffff")
+        self.title_label.pack(pady=10)
 
-**Function to Download Video from URL using yt-dlp**
+        self.start_button = Button(root, text="Start Recording", font=("Helvetica", 12), command=self.start_recording, bg="#4CAF50", fg="#ffffff", activebackground="#45a049", width=20, height=2)
+        self.start_button.pack(pady=10)
+
+        self.stop_button = Button(root, text="Stop Recording", font=("Helvetica", 12), command=self.stop_recording, bg="#f44336", fg="#ffffff", activebackground="#e41c1c", width=20, height=2)
+        self.stop_button.pack(pady=10)
+        self.stop_button.config(state=tk.DISABLED)
+```
+
+- ##### init: Initializes the GUI components and sets up the initial state.
+    * root: The main windo
+    * is_recording: A flag to indicate if recording is in progress.
+    * title_label: A label for the title.
+    * start_button: A button to start recording.
+    * stop_button: A button to stop recording, initially disabled
+
+Start recording
 
 ``` python
-    def download_video():
-    def on_submit():
-        video_url = url_var.get()
-        if not video_url:
-            messagebox.showwarning("Warning", "Please enter a valid video URL.")
-            return
-
-        try:
-            download_path = Path.home() / "Downloads"
-            ydl_opts = {
-                'outtmpl': str(download_path / '%(title)s.%(ext)s'),
-                'format': 'best',
-            }
-
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([video_url])
-
-            messagebox.showinfo("Success", f"Video downloaded successfully to {download_path}")
-            input_window.destroy()
-        
-        except Exception as e:
-            messagebox.showerror("Error", f"An error occurred: {e}")
-
-    input_window = tk.Toplevel()
-    input_window.title("Enter Video URL")
-    input_window.geometry("400x150")
-    input_window.configure(bg='#2E2E2E')
-
-    url_var = tk.StringVar()
-
-    input_label = ttk.Label(input_window, text="Enter the video URL:", font=("Arial", 12))
-    input_label.pack(pady=10)
-
-    input_entry = ttk.Entry(input_window, textvariable=url_var, font=("Arial", 12), width=40)
+        def start_recording(self):
+        self.is_recording = True
+        self.start_button.config(state=tk.DISABLED)
+        self.stop_button.config(state=tk.NORMAL)
+        threading.Thread(target=self.record_screen).start()
 ```
-- **on_submit:** Inner function to handle the submission of the video URL.
-- **url_var.get():** Retrieves the entered video URL.
-- **messagebox.showwarning:** Displays a warning if the URL is not entered.
-- **Path.home() / "Downloads":** Specifies the download path.
-- **yt_dlp.YoutubeDL(ydl_opts):** Creates a yt-dlp object with specified options.
-- **ydl.download([video_url]):** Downloads the video from the URL.
-- **messagebox.showinfo:** Displays a success message.
-- **input_window.destroy():** Closes the input window.
-- **messagebox.showerror:** Displays an error message if an exception occurs.
-- **tk.Toplevel():** Creates a new top-level window for URL input.
-- **input_window.configure(bg='#2E2E2E'):** Sets the background color of the input window.
-- **tk.StringVar():** Creates a variable to store the URL.
-- **ttk.Label:** Creates a label widget.
-- **ttk.Entry:** Creates an entry widget for URL input.
+- ##### start_recording: Sets the recording flag to ```True```, disables the start button, enables the stop button, and starts the recording in a new thread.
+Stop recording
 
-This code provides a GUI for converting JPEG images to PDF, displaying information about EXE to APK conversion, and downloading videos from URLs using yt-dlp.
+``` python
+        def stop_recording(self):
+        self.is_recording = False
+        self.start_button.config(state=tk.NORMAL)
+        self.stop_button.config(state=tk.DISABLED)
+        messagebox.showinfo("Screen Recorder", "Recording stopped and saved in Downloads folder.")
+```
+- ##### stop_recording: Sets the recording flag to ```False```, enables the start button, disables the stop button, and shows a message box indicating that recording has stopped.
+Record screen
+``` python
+        def record_screen(self):
+        screen_size = pyautogui.size()
+        messagebox.showinfo("Screen Recorder", "Recording started. High quality and high graphics settings applied.")
+        fourcc = cv2.VideoWriter_fourcc(*"XVID")
+        output_path = os.path.join(os.path.expanduser("~"), "Downloads", f"recording_{datetime.now().strftime('%Y%m%d_%H%M%S')}.avi")
+        out = cv2.VideoWriter(output_path, fourcc, 20.0, screen_size)
 
-## How to use this software:
-To use this software download the exe file of this software in relaeses in GIthub website and press the button of exe file two times.
+        while self.is_recording:
+            img = pyautogui.screenshot()
+            frame = np.array(img)
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+            out.write(frame)
 
-- **Convert jpeg file to pdf** Press the button of JPEG to pdf and choose file which you want to convert and press open button And name the file which the pdf is convert example -pdf and save it. It convert in pdf.
-- **Download video from youtube** Press download button and paste url the video is download in you computer.
-- **If you want more information press realese button to more information**
+        out.release()
+        cv2.destroyAllWindows()
+```
+- #### record_screen: Captures the screen and writes it to a video file:
+    * screen_size: Gets the screen size.
+    *   fourcc: Specifies the codec for the video.
+    *  output_path: Constructs the output file path.
+    * out: Creates a ```VideoWriter``` object.
+    * while self.is_recording: Continuously captures screenshots and writes them to the video file while recording is active.
+    * out.release(): Releases the video writer object.
+    * cv2.destroyAllWindows(): Closes any OpenCV windows.
+
+Main block
+``` python
+    if __name__ == "__main__":
+    root = tk.Tk()
+    app = ScreenRecorder(root)
+    root.mainloop()
+```
+- ##### Main Block: Creates the main window and starts the Tkinter event loop.
+
+This code sets up a simple screen recorder with a GUI, allowing the user to start and stop recording the screen. The recording is saved as a video file in the Downloads folder.
+
+## Intallation:
+
+There is exe file But I cannot post here in github
+
+- you can use software in you editior like vs code i alreday paste link.
+- Or ````pip install pyintaller ```` and make exe file.
+- To see how create python file to exe see this video: 
+
+
+[![Watch the video](https://i.ytimg.com/vi/bEBMo52OCis/maxresdefault.jpg)](https://youtu.be/32sHvb4oigk)
+
